@@ -171,7 +171,13 @@ export function follow(
  * a button that does nothing.
  */
 export function toggleFullscreen(box: HTMLElement | null, video: HTMLVideoElement | null): void {
-  if (document.fullscreenElement) void document.exitFullscreen();
-  else if (box?.requestFullscreen) void box.requestFullscreen();
-  else (video as (HTMLVideoElement & { webkitEnterFullscreen?: () => void }) | null)?.webkitEnterFullscreen?.();
+  if (document.fullscreenElement) {
+    void document.exitFullscreen();
+    return;
+  }
+  const v = video as (HTMLVideoElement & { webkitEnterFullscreen?: () => void }) | null;
+  const el = box as (HTMLElement & { webkitRequestFullscreen?: () => void }) | null;
+  if (el?.requestFullscreen) el.requestFullscreen().catch(() => v?.webkitEnterFullscreen?.());
+  else if (el?.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  else v?.webkitEnterFullscreen?.();
 }
