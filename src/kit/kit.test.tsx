@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { ThemeProvider } from '@mui/material/styles';
 import { createAtTheme } from '../theme';
-import { AtLinkProvider, ExternalLink, FactGrid, PageHead, PlayerAvatar, ProviderLogo, SectionHead, StatCard, StatusPill, DataTable, Badge, CompatDot, compatTone, playerInitials, CodeBlock, Crumbs, DetailList, Disclosure, MarkPill, Reveal, StatePill } from '../index';
+import { AtLinkProvider, ExternalLink, FactGrid, PageHead, PlayerAvatar, ProviderLogo, SectionHead, StatCard, StatusPill, DataTable, Badge, CompatDot, compatTone, playerInitials, CodeBlock, Crumbs, DetailList, Disclosure, MarkPill, Reveal, StatePill, AvatarDot, BracketCard, EventMark, HighlightCard, ProfileCard, RatingChart, ServersCard, UsageMeter, VetoCard, clock } from '../index';
 
 const render = (node: React.ReactNode) =>
   renderToStaticMarkup(<ThemeProvider theme={createAtTheme()}>{node}</ThemeProvider>);
@@ -66,6 +66,23 @@ describe('kit', () => {
     expect(render(<StatePill state="live" label="Live" />)).toContain('Live');
     expect(render(<MarkPill>M</MarkPill>)).toContain('M');
     expect(render(<Reveal>r</Reveal>)).toContain('r');
+  });
+  it('renders clip cards and timeline marks', () => {
+    expect(render(<HighlightCard to="/c/1" title="Ace" sub="Round 1" video="/1.mp4" />)).toContain('href="/c/1"');
+    expect(render(<EventMark at="50%" kind="kill" title="Kill" />)).toContain('Kill');
+    expect(clock(65)).toBe('1:05');
+  });
+  it('draws a rating chart, or says there is no history', () => {
+    const points = [{ eloAfter: 1000, createdAt: 1 }, { eloAfter: 1100, createdAt: 2 }];
+    expect(render(<RatingChart history={points} chartLabel={(a, b) => `${a}-${b}`} />)).toContain('1000-1100');
+    expect(render(<RatingChart history={[]} noHistoryText="None" />)).toContain('None');
+  });
+  it('turns the meter red only past the limit, and renders the status dot', () => {
+    expect(render(<UsageMeter used={2} max={4} of="of 4" />)).toContain('of 4');
+    expect(render(<AvatarDot shade="#0f0" label="Online" size={32} />)).toContain('Online');
+  });
+  it('renders the demo cards', () => {
+    for (const Card of [BracketCard, VetoCard, ServersCard, ProfileCard]) expect(render(<Card />).length).toBeGreaterThan(100);
   });
   it('exports the fact grid', () => {
     expect(FactGrid).toBeTypeOf('function');
