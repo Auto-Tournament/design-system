@@ -4,7 +4,15 @@
  */
 import { createTheme, type ThemeOptions } from '@mui/material/styles';
 import { DEFAULT_THEME_ID, THEME_COLORS, type ThemeId } from './themes';
-import { fontBody, fontDisplay, fontMono, staticTokens, textSize, themeVars, withRgbAlpha as withAlpha } from './tokens';
+import {
+  fontBody as defaultBody,
+  fontDisplay as defaultDisplay,
+  fontMono as defaultMono,
+  staticTokens, 
+  textSize,
+  themeVars,
+  withRgbAlpha as withAlpha,
+} from './tokens';
 
 // Extra surface levels on `background`, so components can ask for a raised
 // surface (`surface2`, `surface3`) without reaching for a colour.
@@ -20,18 +28,15 @@ export interface AtThemeOptions {
   themeId?: ThemeId;
   /** CSS variables only this app needs, added to `:root`. */
   rootVars?: Record<string, string>;
+  /** The fonts, when the app loads them under other names (next/font). */
+  fonts?: { display: string; body: string; mono: string };
+  /** MUI's CSS variables, for themes swapped at runtime without a rebuild. */
+  cssVariables?: boolean;
   /** Anything else this app needs; merged by MUI. */
   options?: ThemeOptions;
 }
 
 const { radius, ease, duration, appColor } = staticTokens;
-
-const headingBase = {
-  fontFamily: fontDisplay,
-  fontWeight: 700,
-  letterSpacing: '-0.02em',
-  lineHeight: 1.15,
-} as const;
 
 /**
  * Status colours used on tinted chips and alerts: a faint wash of the colour
@@ -45,11 +50,23 @@ const tint = (main: string) => ({
 export function createAtTheme({
   themeId = DEFAULT_THEME_ID,
   rootVars = {},
+  fonts,
+  cssVariables = false,
   options = {},
 }: AtThemeOptions = {}) {
   const color = { ...THEME_COLORS[themeId], ...appColor };
+  const fontDisplay = fonts?.display ?? defaultDisplay;
+  const fontBody = fonts?.body ?? defaultBody;
+  const fontMono = fonts?.mono ?? defaultMono;
+  const headingBase = {
+    fontFamily: fontDisplay,
+    fontWeight: 700,
+    letterSpacing: '-0.02em',
+    lineHeight: 1.15,
+  } as const;
   return createTheme(
     {
+      cssVariables,
   palette: {
     mode: 'dark',
     primary: { main: color.accent, light: color.accent2, dark: color.accent, contrastText: color.accentInk },
@@ -170,6 +187,9 @@ export function createAtTheme({
         root: {
           borderRadius: radius.pill,
           padding: '0.5rem 1.1rem',
+          // Labels wrap rather than spill out of the pill on narrow screens.
+          overflowWrap: 'break-word',
+          maxWidth: '100%',
           transition: `background-color ${duration.fast}ms ${ease.out}, border-color ${duration.fast}ms ${ease.out}, box-shadow ${duration.base}ms ${ease.out}, transform ${duration.fast}ms ${ease.out}`,
           '&:active': { transform: 'translateY(1px)' },
         },
@@ -177,18 +197,18 @@ export function createAtTheme({
           '&:hover': { backgroundColor: color.accent2 },
         },
         outlinedPrimary: {
-          borderColor: color.rule,
+          borderColor: color.fieldRule,
           color: color.ink,
-          '&:hover': { borderColor: color.rule, backgroundColor: color.paper3 },
+          '&:hover': { borderColor: color.fieldRule, backgroundColor: color.paper3 },
         },
         outlinedInherit: {
-          borderColor: color.rule,
-          '&:hover': { borderColor: color.rule, backgroundColor: color.paper3 },
+          borderColor: color.fieldRule,
+          '&:hover': { borderColor: color.fieldRule, backgroundColor: color.paper3 },
         },
         outlinedSecondary: {
-          borderColor: color.rule,
+          borderColor: color.fieldRule,
           color: color.ink2,
-          '&:hover': { borderColor: color.rule, backgroundColor: color.paper3 },
+          '&:hover': { borderColor: color.fieldRule, backgroundColor: color.paper3 },
         },
         textPrimary: { color: color.accent2 },
         // MUI sizes a button's icon by font-size (18/20/22px); a Phosphor
