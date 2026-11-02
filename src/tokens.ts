@@ -9,10 +9,27 @@ export type ColorKey = keyof ThemeColorOverrides;
 const cssVar = (key: string) => `--at-${key.replace(/[A-Z0-9]/g, (c) => `-${c.toLowerCase()}`)}`;
 const ember = THEME_COLORS[DEFAULT_THEME_ID];
 
+const appColor = {
+  warning: '#f2b84b', // amber, kept apart from the brand orange
+  info: '#7fb0e8',
+  scrim: 'rgba(8, 4, 3, 0.72)', // dialog backdrop
+  shadow: 'rgba(0, 0, 0, 0.45)',
+  // CS2 side colours, used on scoreboards and side picks.
+  sideCt: '#7fb0e8',
+  sideT: '#e8b04b',
+  // Leaderboard medals for places 1-3.
+  medalGold: '#f2c14b',
+  medalSilver: '#c4bcb9',
+  medalBronze: '#c98a5a',
+} as const;
+
 export const tokens = {
-  color: Object.fromEntries(
-    Object.entries(ember).map(([k, v]) => [k, `var(${cssVar(k)}, ${v})`])
-  ) as Record<ColorKey, string>,
+  color: {
+    ...(Object.fromEntries(
+      Object.entries(ember).map(([k, v]) => [k, `var(${cssVar(k)}, ${v})`])
+    ) as Record<ColorKey, string>),
+    ...appColor,
+  },
   radius: { sm: 8, md: 14, lg: 22, pill: 999 },
   space: {
     xs: '0.5rem',
@@ -32,6 +49,14 @@ export const tokens = {
   duration: { fast: 150, base: 240, slow: 600 },
 } as const;
 
+/** The radius tokens as CSS lengths, for `sx`: a bare number there is multiplied by 8px. */
+export const radii = {
+  sm: `${tokens.radius.sm}px`,
+  md: `${tokens.radius.md}px`,
+  lg: `${tokens.radius.lg}px`,
+  pill: `${tokens.radius.pill}px`,
+} as const;
+
 /** The CSS variables of a theme, to set on `:root`. */
 export function themeVars(id: ThemeId): Record<string, string> {
   return Object.fromEntries(Object.entries(THEME_COLORS[id]).map(([k, v]) => [cssVar(k), v]));
@@ -46,19 +71,7 @@ export const staticTokens = {
   radius: tokens.radius,
   ease: tokens.ease,
   duration: tokens.duration,
-  appColor: {
-    warning: '#f2b84b', // amber, kept apart from the brand orange
-    info: '#7fb0e8',
-    scrim: 'rgba(8, 4, 3, 0.72)', // dialog backdrop
-    shadow: 'rgba(0, 0, 0, 0.45)',
-    // CS2 side colours, used on scoreboards and side picks.
-    sideCt: '#7fb0e8',
-    sideT: '#e8b04b',
-    // Leaderboard medals for places 1-3.
-    medalGold: '#f2c14b',
-    medalSilver: '#c4bcb9',
-    medalBronze: '#c98a5a',
-  },
+  appColor,
 } as const;
 
 /**
