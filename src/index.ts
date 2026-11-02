@@ -21,3 +21,7 @@ export * from './chat/ChatComposer';
 export * from './chat/Chat';
 export * from './kit/ProviderLogo';
 export * from './kit/stats';
+export * from './kit/ConfirmDialog';
+export * from './kit/PlayerAvatar';
+export * from './kit/CompatDot';
+export * from './kit/data';
