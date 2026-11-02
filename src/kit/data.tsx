@@ -124,7 +124,7 @@ export function DataStat({ label, value, sub }: { label: string; value: React.Re
 /** A labelled progress bar (a <meter>-like div with the value in text too). */
 export function Progress({ label, value, max, text }: { label: string; value: number; max: number; text: string }) {
   const pct = Math.max(0, Math.min(100, (value / max) * 100));
-  const tone = pct >= 90 ? color.ban : pct >= 70 ? color.warn : color.live;
+  const tone = pct >= 90 ? color.ban : pct >= 70 ? color.warning : color.live;
   return (
     <Box sx={{ minWidth: 0 }}>
       <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 1, fontSize: '0.875rem', mb: 0.75 }}>
