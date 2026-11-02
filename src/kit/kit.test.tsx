@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { ThemeProvider } from '@mui/material/styles';
 import { createAtTheme } from '../theme';
-import { AtLinkProvider, ExternalLink, FactGrid, PageHead, PlayerAvatar, ProviderLogo, SectionHead, StatCard, StatusPill, DataTable, Badge, CompatDot, compatTone, playerInitials } from '../index';
+import { AtLinkProvider, ExternalLink, FactGrid, PageHead, PlayerAvatar, ProviderLogo, SectionHead, StatCard, StatusPill, DataTable, Badge, CompatDot, compatTone, playerInitials, CodeBlock, Crumbs, DetailList, Disclosure, MarkPill, Reveal, StatePill } from '../index';
 
 const render = (node: React.ReactNode) =>
   renderToStaticMarkup(<ThemeProvider theme={createAtTheme()}>{node}</ThemeProvider>);
@@ -53,6 +53,19 @@ describe('kit', () => {
     expect(compatTone(null)).toBe('none');
     expect(render(<Badge tone="good">OK</Badge>)).toContain('OK');
     expect(CompatDot).toBeTypeOf('function');
+  });
+  it('marks the current page in the crumbs', () => {
+    const html = render(<Crumbs items={[{ label: 'Games', href: '/games' }, { label: 'CS2', href: '/games/cs2' }]} />);
+    expect(html).toContain('href="/games"');
+    expect(html).toContain('aria-current="page"');
+  });
+  it('renders the rest', () => {
+    expect(render(<DetailList rows={[['Key', 'Value']]} />)).toContain('<dt');
+    expect(render(<CodeBlock code="ls" />)).toContain('ls');
+    expect(render(<Disclosure id="a" title="T">x</Disclosure>)).toContain('a-summary');
+    expect(render(<StatePill state="live" label="Live" />)).toContain('Live');
+    expect(render(<MarkPill>M</MarkPill>)).toContain('M');
+    expect(render(<Reveal>r</Reveal>)).toContain('r');
   });
   it('exports the fact grid', () => {
     expect(FactGrid).toBeTypeOf('function');
