@@ -25,3 +25,7 @@ export * from './kit/ConfirmDialog';
 export * from './kit/PlayerAvatar';
 export * from './kit/CompatDot';
 export * from './kit/data';
+export * from './kit/pills';
+export * from './kit/Disclosure';
+export * from './kit/CodeBlock';
+export * from './kit/page';

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createAtTheme } from './theme';
+import { fontDisplay } from './tokens';
 import { THEME_COLORS, THEME_IDS } from './themes';
 
 describe('createAtTheme', () => {
@@ -15,6 +16,12 @@ describe('createAtTheme', () => {
     const baseline = theme.components?.MuiCssBaseline?.styleOverrides as Record<string, Record<string, string>>;
     expect(baseline[':root']?.['--at-paper-2']).toBe(THEME_COLORS.mint.paper2);
     expect(baseline[':root']?.['--app-only']).toBe('1');
+  });
+});
+
+describe('fonts', () => {
+  it('take next/font variables, with the names as a fallback', () => {
+    expect(fontDisplay).toContain('var(--font-display, "Sora")');
   });
 });
 

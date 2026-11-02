@@ -102,7 +102,8 @@ export function withRgbAlpha(hex: string, alpha: number): string {
   return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
 }
 
-export const fontDisplay = '"Sora", "Geist", system-ui, sans-serif';
-export const fontBody = '"Geist", system-ui, -apple-system, "Segoe UI", sans-serif';
-export const fontMono = '"Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace';
+// An app that loads the fonts under other names (next/font) sets these variables.
+export const fontDisplay = 'var(--font-display, "Sora"), "Geist", system-ui, sans-serif';
+export const fontBody = 'var(--font-body, "Geist"), system-ui, -apple-system, "Segoe UI", sans-serif';
+export const fontMono = 'var(--font-mono, "Geist Mono"), ui-monospace, "SFMono-Regular", Menlo, monospace';
 export const mono = { fontFamily: fontMono } as const;
