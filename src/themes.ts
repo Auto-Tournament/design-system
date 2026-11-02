@@ -45,6 +45,8 @@ export interface ThemeColorOverrides {
   navGlass: string;
   /** Fill for the dark parts of the ram logo (AtIcon). */
   logoInk: string;
+  /** Borders of fields and outlined buttons: at least 3:1 on every paper colour. */
+  fieldRule: string;
 }
 
 export const THEME_COLORS: Record<ThemeId, ThemeColorOverrides> = {
@@ -65,6 +67,7 @@ export const THEME_COLORS: Record<ThemeId, ThemeColorOverrides> = {
     ban: '#f2645f',
     navGlass: 'rgba(24, 17, 14, 0.82)',
     logoInk: '#1d1d1f',
+    fieldRule: '#736966',
   },
   ultraviolet: {
     paper: '#0b0917',
@@ -83,6 +86,7 @@ export const THEME_COLORS: Record<ThemeId, ThemeColorOverrides> = {
     ban: '#f2645f',
     navGlass: 'rgba(18, 16, 31, 0.82)',
     logoInk: '#151423',
+    fieldRule: '#686872',
   },
   mint: {
     paper: '#000f0b',
@@ -101,6 +105,7 @@ export const THEME_COLORS: Record<ThemeId, ThemeColorOverrides> = {
     ban: '#f2645f',
     navGlass: 'rgba(0, 24, 19, 0.82)',
     logoInk: '#051a16',
+    fieldRule: '#606c69',
   },
   aurora: {
     paper: '#0b0915',
@@ -119,6 +124,7 @@ export const THEME_COLORS: Record<ThemeId, ThemeColorOverrides> = {
     ban: '#f2645f',
     navGlass: 'rgba(18, 17, 29, 0.82)',
     logoInk: '#151421',
+    fieldRule: '#686872',
   },
   coral: {
     paper: '#0f090d',
@@ -137,6 +143,7 @@ export const THEME_COLORS: Record<ThemeId, ThemeColorOverrides> = {
     ban: '#f2645f',
     navGlass: 'rgba(23, 16, 20, 0.82)',
     logoInk: '#1a1418',
+    fieldRule: '#6f666b',
   },
 };
 

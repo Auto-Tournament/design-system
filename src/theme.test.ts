@@ -17,3 +17,15 @@ describe('createAtTheme', () => {
     expect(baseline[':root']?.['--app-only']).toBe('1');
   });
 });
+
+describe('createAtTheme options', () => {
+  it('takes the fonts an app loads under its own names', () => {
+    const theme = createAtTheme({ fonts: { display: 'D', body: 'B', mono: 'M' } });
+    expect(theme.typography.fontFamily).toBe('B');
+    expect(theme.typography.h1.fontFamily).toBe('D');
+  });
+  it('gives CSS variables on request', () => {
+    expect('vars' in createAtTheme({ cssVariables: true })).toBe(true);
+    expect('vars' in createAtTheme()).toBe(false);
+  });
+});
