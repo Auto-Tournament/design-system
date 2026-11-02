@@ -19,3 +19,5 @@ export * from './chat/EmojiPicker';
 export * from './chat/ChatMessageLine';
 export * from './chat/ChatComposer';
 export * from './chat/Chat';
+export * from './kit/ProviderLogo';
+export * from './kit/stats';

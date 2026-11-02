@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { ThemeProvider } from '@mui/material/styles';
 import { createAtTheme } from '../theme';
-import { AtLinkProvider, ExternalLink, FactGrid, PageHead, SectionHead } from '../index';
+import { AtLinkProvider, ExternalLink, FactGrid, PageHead, ProviderLogo, SectionHead, StatCard, StatusPill } from '../index';
 
 const render = (node: React.ReactNode) =>
   renderToStaticMarkup(<ThemeProvider theme={createAtTheme()}>{node}</ThemeProvider>);
@@ -28,6 +28,15 @@ describe('kit', () => {
     const html = render(<ExternalLink href="https://example.com">Docs</ExternalLink>);
     expect(html).toContain('target="_blank"');
     expect(html).toContain('(opens in a new tab)');
+  });
+  it('draws sign-in logos, and nothing for an unknown provider', () => {
+    expect(render(<ProviderLogo id="steam" />)).toContain('<path');
+    expect(render(<ProviderLogo id="google" />)).toContain('#EA4335');
+    expect(render(<ProviderLogo id="nope" />)).toBe('');
+  });
+  it('renders stats and states', () => {
+    expect(render(<StatCard label="Servers" value={4} />)).toContain('Servers');
+    expect(render(<StatusPill tone="good">Active</StatusPill>)).toContain('Active');
   });
   it('exports the fact grid', () => {
     expect(FactGrid).toBeTypeOf('function');
