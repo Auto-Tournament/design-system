@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { ThemeProvider } from '@mui/material/styles';
 import { createAtTheme } from '../theme';
-import { AtLinkProvider, ExternalLink, FactGrid, PageHead, ProviderLogo, SectionHead, StatCard, StatusPill } from '../index';
+import { AtLinkProvider, ExternalLink, FactGrid, PageHead, PlayerAvatar, ProviderLogo, SectionHead, StatCard, StatusPill, DataTable, Badge, CompatDot, compatTone, playerInitials } from '../index';
 
 const render = (node: React.ReactNode) =>
   renderToStaticMarkup(<ThemeProvider theme={createAtTheme()}>{node}</ThemeProvider>);
@@ -37,6 +37,22 @@ describe('kit', () => {
   it('renders stats and states', () => {
     expect(render(<StatCard label="Servers" value={4} />)).toContain('Servers');
     expect(render(<StatusPill tone="good">Active</StatusPill>)).toContain('Active');
+  });
+  it('falls back to initials, and uses the generated picture when given', () => {
+    expect(playerInitials('Sam Berg')).toBe('SB');
+    expect(render(<PlayerAvatar name="Sam Berg" />)).toContain('SB');
+    expect(render(<PlayerAvatar name="S" id="7" generatedSrc={(id) => `/a/${id}.svg`} />)).toContain('/a/7.svg');
+  });
+  it('labels table cells for phones, and says when empty', () => {
+    const columns = [{ key: 'a', label: 'Name' }];
+    expect(render(<DataTable label="T" columns={columns} rows={[{ key: '1', cells: { a: 'x' } }]} />)).toContain('data-label="Name"');
+    expect(render(<DataTable label="T" columns={columns} rows={[]} empty="None" />)).toContain('None');
+  });
+  it('maps states to tones', () => {
+    expect(compatTone('pending')).toBe('warn');
+    expect(compatTone(null)).toBe('none');
+    expect(render(<Badge tone="good">OK</Badge>)).toContain('OK');
+    expect(CompatDot).toBeTypeOf('function');
   });
   it('exports the fact grid', () => {
     expect(FactGrid).toBeTypeOf('function');
