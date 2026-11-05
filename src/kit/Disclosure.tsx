@@ -8,7 +8,9 @@ import { fontDisplay, tokens } from '../tokens';
 const { color, ease, duration } = tokens;
 
 /**
- * One collapsible section: fine print, an FAQ. The
+ * One collapsible section: fine print, an FAQ. The theme draws every
+ * accordion as its own rounded panel (theme.ts MuiAccordion), so the summary
+ * and the text sit inset from its border, and stacked panels keep a small gap. The
  * summary is a button inside an h3 (MUI's heading slot), so headings stay in
  * order and it works with Tab, Enter and Space. It opens by itself when the
  * URL points at it (#founder-terms, #rules…), so old links still land on
@@ -39,11 +41,9 @@ export function Disclosure({ id, title, children }: { id: string; title: React.R
       elevation={0}
       slotProps={{ region: { id: `${id}-content`, 'aria-labelledby': `${id}-summary` } }}
       sx={{
-        bgcolor: 'transparent',
         backgroundImage: 'none',
         color: 'inherit',
-        borderTop: `1px solid ${color.rule}`,
-        '&:last-of-type': { borderBottom: `1px solid ${color.rule}` },
+        '& + &': { mt: 1 },
         '&::before': { display: 'none' },
       }}
     >
@@ -54,9 +54,10 @@ export function Disclosure({ id, title, children }: { id: string; title: React.R
           <Box component="span" aria-hidden sx={{ width: 10, height: 10, mt: '-4px', borderRight: `2px solid ${color.ink2}`, borderBottom: `2px solid ${color.ink2}`, transform: 'rotate(45deg)' }} />
         }
         sx={{
-          px: 0,
+          px: { xs: 2, md: 2.5 },
           py: 1,
           minHeight: 56,
+          borderRadius: 'inherit',
           '& .MuiAccordionSummary-content': { my: 1, mr: 2 },
           '& .MuiAccordionSummary-expandIconWrapper': { mr: 1, transition: `transform ${duration.fast}ms ${ease.out}` },
           '&.Mui-focusVisible': { bgcolor: 'transparent', outline: `2px solid ${color.focus}`, outlineOffset: 2 },
@@ -68,7 +69,7 @@ export function Disclosure({ id, title, children }: { id: string; title: React.R
           {title}
         </Box>
       </AccordionSummary>
-      <AccordionDetails sx={{ px: 0, pt: 0, pb: 3, color: color.ink2 }}>{children}</AccordionDetails>
+      <AccordionDetails sx={{ px: { xs: 2, md: 2.5 }, pt: 0, pb: 2.5, color: color.ink2 }}>{children}</AccordionDetails>
     </Accordion>
   );
 }
